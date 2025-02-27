@@ -9,10 +9,33 @@ import SwiftUI
 
 extension AnyTransition {
 	static func ripple(location: CGPoint) -> AnyTransition {
+		.asymmetric(
+			insertion: .modifier(
+				active: Ripple(location: location, isIdentity: false),
+				identity: Ripple(location: location, isIdentity: true)
+			),
+			removal: .modifier(
+				//Don't set this to 1 otherwise the view will immediately removed
+				active: IdentityDelayTransition(opacity: 0.99),
+				identity: IdentityDelayTransition(opacity: 1)
+			)
+		)
+	}
+	
+	//Reverse ripple effect 
+	static func reverseRipple(location: CGPoint) -> AnyTransition {
 		.modifier(
 			active: Ripple(location: location, isIdentity: false),
 			identity: Ripple(location: location, isIdentity: true)
 		)
+	}
+}
+
+fileprivate struct IdentityDelayTransition: ViewModifier {
+	var opacity: CGFloat
+	func body(content: Content) -> some View {
+		content
+			.opacity(opacity)
 	}
 }
 	
@@ -61,4 +84,6 @@ fileprivate struct Ripple: ViewModifier {
 	}
 }
 
-
+#Preview {
+	ContentView()
+}

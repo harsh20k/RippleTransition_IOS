@@ -20,6 +20,7 @@ struct ContentView: View {
 					ForEach(0...1, id: \.self) { index in
 						if count == index {
 							ImageView(index, size: size)
+								.transition(.ripple(location: rippleLocation))
 						}
 					}
 				}
